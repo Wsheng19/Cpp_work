@@ -26,6 +26,7 @@ public:
 	void PostOrder(BiNode<T> * R);							//后序遍历
 	void LevelOrder(BiNode<T> * R);							//层序遍历
 	int NodeNum(BiNode<T> * R);								//求结点数
+	bool printPath(BiNode<T> * R, BiNode<T> * r);			//输出从叶子结点到根的路径
 };
 
 template<class T>
@@ -40,7 +41,7 @@ void BiTree<T>::Create(BiNode<T> * &R, T data[], int i)
 		Create(R->lch, data, 2 * i);
 		Create(R->rch, data, 2 * i + 1);
 	}
-}
+}	//时间复杂度：O(n);
 
 template<class T>
 void BiTree<T>::Create(BiNode<T> * &R, BiNode<T> * r)
@@ -54,19 +55,19 @@ void BiTree<T>::Create(BiNode<T> * &R, BiNode<T> * r)
 		Create(R->lch, r->lch);
 		Create(R->rch, r->rch);
 	}
-}
+}	//时间复杂度：O(n);
 
 template<class T>
 BiTree<T>::BiTree(T data[])
 {
 	Create(root, data, 1);
-}
+}	//时间复杂度：O(n);
 
 template<class T>
 BiTree<T>::BiTree(BiTree<T> &B)
 {
 	Create(root, B.root);
-}
+}	//时间复杂度：O(n);
 
 template<class T>
 void BiTree<T>::Release(BiNode<T> * R)
@@ -77,13 +78,13 @@ void BiTree<T>::Release(BiNode<T> * R)
 		Release(R->rch);
 		delete R;
 	}
-}
+}	//时间复杂度：O(n);
 
 template<class T>
 BiTree<T>::~BiTree()
 {
 	Release(root);
-}
+}	//时间复杂度：O(n);
 
 template<class T>
 void BiTree<T>::PreOrder(BiNode<T> * R)
@@ -94,7 +95,7 @@ void BiTree<T>::PreOrder(BiNode<T> * R)
 		PreOrder(R->lch);
 		PreOrder(R->rch);
 	}
-}
+}	//时间复杂度：O(n);
 
 template<class T>
 void BiTree<T>::InOrder(BiNode<T> * R)
@@ -105,7 +106,7 @@ void BiTree<T>::InOrder(BiNode<T> * R)
 		cout << R->data << ' ';
 		InOrder(R->rch);
 	}
-}
+}	//时间复杂度：O(n);
 
 template<class T>
 void BiTree<T>::PostOrder(BiNode<T> * R)
@@ -116,7 +117,7 @@ void BiTree<T>::PostOrder(BiNode<T> * R)
 		PostOrder(R->rch);
 		cout << R->data << ' ';
 	}
-}
+}	//时间复杂度：O(n);
 
 template<class T>
 void BiTree<T>::LevelOrder(BiNode<T> * R)
@@ -133,21 +134,26 @@ void BiTree<T>::LevelOrder(BiNode<T> * R)
 		if (p->rch != NULL)
 			queue[++r] = p->rch;
 	}
-}
+}	//时间复杂度：O(n);
 
 template<class T>
 int BiTree<T>::NodeNum(BiNode<T> * R)
 {
-	BiNode<T> * queue[10000];
-	int f = 0, r = 0;
-	if (R != NULL) queue[++r] = R;
-	while (f != r)
+	if (R == NULL) return 0;
+	int m = NodeNum(R->lch);
+	int n = NodeNum(R->rch);
+	return m + n + 1;
+}	//时间复杂度：O(n);
+
+template<class T>
+bool BiTree<T>::printPath(BiNode<T> * Root, BiNode<T> * r)
+{
+	if (Root == NULL)
+		return false;
+	if (Root == r || printPath(Root->lch, r) || printPath(Root->rch, r))
 	{
-		BiNode<T> * p = queue[++f];
-		if (p->lch != NULL)
-			queue[++r] = p->lch;
-		if (p->rch != NULL)
-			queue[++r] = p->rch;
+		cout << Root->data << " ";
+		return true;
 	}
-	return r;
-}
+	return false;
+}	//时间复杂度：O(n);
